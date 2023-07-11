@@ -1,0 +1,29 @@
+version: "3"
+
+services:
+  db:
+    image: postgres:latest
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todo_app_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - todo_app_db:/var/lib/postgresql/data
+
+  web:
+    build: .
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=todo_app_db
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+
+volumes:
+  todo_app_db:
